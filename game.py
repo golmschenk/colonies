@@ -1,4 +1,4 @@
-"""Game class stuff."""
+"""This file contains the stuff for the overall data of a specific game."""
 
 class Game:
     """The class to hold the game data."""
