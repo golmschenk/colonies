@@ -6,3 +6,10 @@ class Game:
         """Game object initilizer."""
         self.players = []
         self.board = []
+
+    def create_empty_board(self, width, height):
+        """Sets up an empty board of the given size."""
+        for x in range(width):
+            self.board.append([])  # Add a new row (empty list).
+            for y in range(height):
+                self.board[-1].append(None)  # Add a space in the new row (None object).
