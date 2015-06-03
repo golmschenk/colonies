@@ -7,7 +7,7 @@ class Game:
         self.players = []
         self.board = []
 
-    def create_empty_board(self, width, height):
+    def create_empty_board(self, height, width):
         """Sets up an empty board of the given size."""
         for x in range(width):
             self.board.append([])  # Add a new row (empty list).
