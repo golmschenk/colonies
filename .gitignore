@@ -5,6 +5,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Special Colonies files
+*.log
+
 # C extensions
 *.so
 
@@ -58,5 +61,4 @@ docs/_build/
 
 # PyBuilder
 target/
-
 
