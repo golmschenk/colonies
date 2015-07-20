@@ -1,24 +1,25 @@
 """Main execution file."""
-from gameBoard import GameBoard
-from gameParser import GameParser
+from game_board import GameBoard
+from game_parser import GameParser
+from game_logger import logger
 import sys
 
 
-def main(iArgv):
+def main(argv):
     """
     Method that gets executed to run a game of colonies.
-    Args:
-        iArgv - Location of a colonies level file to parse and play.
+    :param argv: Passed argument list to program. File to parse.
+    :type argv: list
     """
-    if len(iArgv) < 2:
-        print("ERROR - Need to supply file as input.")
+    if len(argv) < 2:
+        logger.error("ERROR - Need to supply file as input.")
         return
 
     # Parse the provided file into a GameBoard object.
-    sampleGameBoard = GameBoard()
-    GameParser.ParseFile(iArgv[1], sampleGameBoard)
+    sample_game_board = GameBoard()
+    GameParser.parse_file(argv[1], sample_game_board)
 
     # Display the resulting GameBoard object in text form.
-    sampleGameBoard.DisplayTextBoard()
+    sample_game_board.display_text_board()
 
 main(sys.argv)

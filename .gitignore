@@ -8,6 +8,10 @@ __pycache__/
 # Special Colonies files
 *.log
 
+# Eclipse files
+*.project
+*.pydevproject
+
 # C extensions
 *.so
 

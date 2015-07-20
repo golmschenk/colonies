@@ -1,35 +1,38 @@
-from gamePiece import GamePiece
-from gameLogger import logger
+""" Contains the singleton GameParser object and its global methods. """
 
-"""
-Contains a set of methods to help create a GameBoard from
-an input file.
-Sample File:
-
-1 . .
-. . .
-. . 2
-
-or
-
-1..1
-2.X2
-3x.3
-"""
+from game_piece import GamePiece
+from game_logger import logger
 
 
 class GameParser:
+    """
+    Contains a set of methods to help create a GameBoard from
+    an input file.
+    Sample File:
+
+    1 . .
+    . . .
+    . . 2
+
+    or
+
+    1..1
+    2.X2
+    3x.3
+    """
 
     @staticmethod
-    def ConvertCharToPlayer(iChar):
+    def convert_char_to_player(char):
         """
         Method used to take an input character from a level
         and assign a player to it.
         One approach to a switch statement in python:
         http://www.pydanny.com/why-doesnt-python-have-switch-case.html
 
-        Args: iChar - Character to convert to player.
-        Return: The owning player.
+        :param char: Character to convert to player.
+        :type char: char
+        :return: The owning player.
+        :rtype: int
         """
         return {
             '1': 1,
@@ -38,34 +41,37 @@ class GameParser:
             '4': 4,
             'x': 0,
             'X': 0,
-        }.get(iChar, 0)
+        }.get(char, 0)
 
     @staticmethod
-    def IsPiece(iChar):
+    def is_piece(char):
         """
         Method used to determine if a character is a piece.
         Currently, everything besides an empy space is
         considered a piece.
 
-        Args: iChar - Input character to be considered.
-        Return: If it is a piece.
+        :param char: Input character to be considered.
+        :type char: char
+        :return: If it is a piece.
+        :rtype: bool
         """
         return {
             '.': False,
-        }.get(iChar, True)
+        }.get(char, True)
 
     @staticmethod
-    def ParseFile(iFile, oGameBoard):
+    def parse_file(file, game_board):
         """
         Method used to parse in input file and
         populate a gameboard object with various game elements.
         TODO: Needs to populate a number of player objects.
 
-        Args:
-            iFile - Level file to parse.
-            oGameBoard - Fully populated gameboard object.
+        :param file: Level file to parse.
+        :type file: File
+        :param: Fully populated GameBoard object.
+        :type: GameBoard
         """
-        file = open(iFile, "r")
+        file = open(file, "r")
 
         # Operate over each line of the passed file and look for GamePieces.
         height = 0
@@ -74,19 +80,19 @@ class GameParser:
             width = 0
             for char in line.split():
                 # When one is found, add to the GameBoard.
-                if (GameParser.IsPiece(char)):
-                    newPiece = GamePiece(GameParser.ConvertCharToPlayer(char),
-                                         width,
-                                         height,
-                                         char)
-                    oGameBoard.AddPiece(newPiece)
+                if (GameParser.is_piece(char)):
+                    new_piece = GamePiece(GameParser.convert_char_to_player(char),
+                                          width,
+                                          height,
+                                          char)
+                    game_board.add_piece(new_piece)
                 width += 1
             height += 1
 
         # TODO - This has a potential bug if a non-rectangular level is used.
         # Would have to calculate a max length and width, and use that.
         # Or just do things differently. Or fill all non-rectangular areas with Xs.
-        oGameBoard.width = width
-        oGameBoard.height = height
+        game_board.width = width
+        game_board.height = height
 
-        logger.debug("Parsed level name=%s with width=%u height=%u", iFile, width, height)
+        logger.debug("Parsed level name=%s with width=%u height=%u", file, width, height)
