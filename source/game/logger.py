@@ -15,7 +15,8 @@ logger = logging.getLogger('Colonies_Logger')
 logger.setLevel(logging.DEBUG)
 
 # Create file handler which logs even debug messages.
-os.remove('debug.log')
+if os.path.exists('debug.log'):
+    os.remove('debug.log')
 fh = logging.FileHandler('debug.log')
 fh.setLevel(logging.DEBUG)
 
