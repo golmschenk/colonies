@@ -81,10 +81,10 @@ class Parser:
             for char in line.split():
                 # When one is found, add to the Board.
                 if (Parser.is_piece(char)):
-                    new_piece = GamePiece(Parser.convert_char_to_player(char),
-                                          width,
-                                          height,
-                                          char)
+                    new_piece = Piece(Parser.convert_char_to_player(char),
+                                      width,
+                                      height,
+                                      char)
                     game_board.add_piece(new_piece)
                 width += 1
             height += 1
