@@ -1,7 +1,7 @@
 """Main execution file."""
-from game_board import GameBoard
-from game_parser import GameParser
-from game_logger import logger
+from source.game.board import Board
+from source.game.parser import Parser
+from source.game.logger import logger
 import sys
 
 
@@ -15,11 +15,11 @@ def main(argv):
         logger.error("ERROR - Need to supply file as input.")
         return
 
-    # Parse the provided file into a GameBoard object.
-    sample_game_board = GameBoard()
-    GameParser.parse_file(argv[1], sample_game_board)
+    # Parse the provided file into a Board object.
+    sample_game_board = Board()
+    Parser.parse_file(argv[1], sample_game_board)
 
-    # Display the resulting GameBoard object in text form.
+    # Display the resulting Board object in text form.
     sample_game_board.display_text_board()
 
 main(sys.argv)
