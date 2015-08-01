@@ -82,14 +82,14 @@ class Parser:
     @staticmethod
     def find_player(player, game_board):
         """
-        Method to determine if we've encountered a new player
+        Method that attempts to locate a player by index
         in the provided board.
 
         :param player: Potential player to find.
         :type player: int
-        :param player: The current board.
-        :type player: Board
-        :return: The player if found, 0 otherwise.
+        :param game_board: The current board.
+        :type game_board: Board
+        :return: The player if found, None otherwise.
         :rtype: Player
         """
         for x in game_board.players:
@@ -104,11 +104,11 @@ class Parser:
         Looks to see if this player has already been seen
         and returns an existing player accordingly.
 
-        :param character: Character to search from.
-        :type character: int
-        :param player: The current board.
-        :type player: Board
-        :return: The player if found, 0 otherwise.
+        :param char: Character to search from.
+        :type char: char
+        :param game_board: The current board.
+        :type game_board: Board
+        :return: Existing player if found, new player otherwise.
         :rtype: Player
         """
         player_id = Parser.convert_char_to_player_id(char)
@@ -127,8 +127,8 @@ class Parser:
 
         :param file: Level file to parse.
         :type file: File
-        :param: Fully populated Board object.
-        :type: Board
+        :param game_board: Fully populated Board object.
+        :type game_board: Board
         """
         file = open(file, "r")
 
