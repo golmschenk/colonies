@@ -32,7 +32,7 @@ class Board:
         """
         Method that adds a player to the board.
         :param player: The player to add.
-        :type play: Player
+        :type player: Player
         """
         self.players.append(player)
 
