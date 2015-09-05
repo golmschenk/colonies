@@ -6,6 +6,7 @@ from .player import Player
 
 
 class Parser:
+
     """
     Contains a set of methods to help create a Board from
     an input file.
@@ -59,8 +60,8 @@ class Parser:
             '6': 6,
             '7': 7,
             '8': 8,
-            'x': 0,
-            'X': 0,
+            #'x': 0,
+            #'X': 0,
         }.get(char, 0)
 
     @staticmethod
@@ -113,7 +114,7 @@ class Parser:
         """
         player_id = Parser.convert_char_to_player_id(char)
         player = Parser.find_player(player_id, game_board)
-        if (player is None):
+        if player is None and player_id is not 0:
             player = Player(player_id)
             game_board.add_player(player)
             logger.debug("Creating new player=%u", player.id)
@@ -151,7 +152,8 @@ class Parser:
 
         # TODO - This has a potential bug if a non-rectangular level is used.
         # Would have to calculate a max length and width, and use that.
-        # Or just do things differently. Or fill all non-rectangular areas with Xs.
+        # Or just do things differently. Or fill all non-rectangular areas with
+        # Xs.
         game_board.width = width
         game_board.height = height
 
