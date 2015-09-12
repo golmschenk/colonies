@@ -88,11 +88,10 @@ class Console:
         y = xy[1]
 
         # Check for piece collision.
-        for match_piece in self.board.pieces:
-            if match_piece.x is x and match_piece.y is y:
-                logger.error("Invalid move selection for player=%u. Piece exists at (%u,%u).",
-                             self.active_player.id, x, y)
-                return False
+        if self.does_cause_collision(x, y):
+            logger.error("Invalid move selection for player=%u. Element exists at (%u,%u).",
+                         self.active_player.id, x, y)
+            return False
 
         # When move is made, attempt it.
         if piece.is_jump_distance(x, y):
@@ -140,3 +139,25 @@ class Console:
             if piece.is_adjacent_to(
                     current_piece) and current_piece.player is not piece.player:
                 piece.capture(current_piece.player)
+
+    def does_cause_collision(self, x, y):
+        """
+        Determine if the new coordinates cause a collision.
+        :param x: X-coordinate
+        :type x: Int
+        :param x: Y-coordinate
+        :type x: Int
+        :return: If this would cause collision.
+        :rtype: Bool
+        """
+        # Check for pieces.
+        for match_piece in self.board.pieces:
+            if match_piece.x is x and match_piece.y is y:
+                return True
+
+        # Check for zones with collision.
+        for match_zone in self.board.zones:
+            if match_zone.x is x and match_zone.y is y and match_zone.collision:
+                return True
+
+        return False

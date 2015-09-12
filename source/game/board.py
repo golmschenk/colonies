@@ -20,6 +20,7 @@ class Board:
         self.number_of_boards += 1
         self.pieces = []
         self.players = []
+        self.zones = []
 
     def add_piece(self, piece):
         """
@@ -29,6 +30,14 @@ class Board:
         :type piece: Piece
         """
         self.pieces.append(piece)
+
+    def add_zone(self, zone):
+        """
+        Method that adds a zone to the zone list of the board.
+        :param zone: The zone to add.
+        :type zone: Zone
+        """
+        self.zones.append(zone)
 
     def add_player(self, player):
         """
@@ -57,24 +66,36 @@ class Board:
 
         display_string = ""
 
-        # Operate over a copy of the list of pieces.
+        # Operate over copies of element lists.
         # Could sort by y & x to save a lot of time.
         temp_pieces = list(self.pieces)
+        temp_zones = list(self.zones)
         for y in range(self.height):
             for x in range(self.width):
 
-                # Attempt to find a piece for the new slot.
-                piece_found = False
-                for piece in temp_pieces:
-                    if piece.x == x and piece.y == y:
-                        display_string += str(piece.type)
-                        temp_pieces.remove(piece)
-                        piece_found = True
+                # Attempt to find a zone for the new slot.
+                # Some zones may be 'transparent', so pieces may overlap.
+                element_found = False
+                for zone in temp_zones:
+                    if zone.x == x and zone.y == y:
+                        new_char = str(zone.type)
+                        temp_zones.remove(zone)
+                        element_found = True
                         break
 
-                # If a piece hasn't been found, place an empty space.
-                if piece_found is False:
-                    display_string += '.'
+                # Attempt to find a piece for the new slot.
+                for piece in temp_pieces:
+                    if piece.x == x and piece.y == y:
+                        new_char = str(piece.type)
+                        temp_pieces.remove(piece)
+                        element_found = True
+                        break
+
+                # If an element hasn't been found, place an empty space.
+                if element_found is False:
+                    new_char = '.'
+
+                display_string += new_char
                 display_string += ' '
             display_string += '\n'
         print(display_string)
