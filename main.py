@@ -2,6 +2,7 @@
 from source.game.board import Board
 from source.game.parser import Parser
 from source.game.logger import logger
+from source.game.console import Console
 import sys
 
 
@@ -19,7 +20,8 @@ def main(argv):
     sample_game_board = Board()
     Parser.parse_file(argv[1], sample_game_board)
 
-    # Display the resulting Board object in text form.
-    sample_game_board.display_text_board()
+    # Play a game of Colonies with the newly created board.
+    console = Console(sample_game_board)
+    console.play()
 
 main(sys.argv)

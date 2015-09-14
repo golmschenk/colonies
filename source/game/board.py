@@ -2,6 +2,7 @@
 
 
 class Board:
+
     """Board describes the area where a game is played. """
 
     number_of_boards = 0
@@ -23,6 +24,7 @@ class Board:
     def add_piece(self, piece):
         """
         Method that adds a piece to the pieces list of the board.
+
         :param piece: The piece to add.
         :type piece: Piece
         """
@@ -36,6 +38,20 @@ class Board:
         """
         self.players.append(player)
 
+    def does_player_have_pieces(self, player):
+        """
+        Method that checks if the provided player
+        has any pieces on the board.
+        :param player: The player to check.
+        :type player: Player
+        :return: If the passed player has any pieces.
+        :rtype: bool
+        """
+        for piece in self.pieces:
+            if piece.player is player:
+                return True
+        return False
+
     def display_text_board(self):
         """Displays the game board in text format."""
 
@@ -43,17 +59,18 @@ class Board:
 
         # Operate over a copy of the list of pieces.
         # Could sort by y & x to save a lot of time.
-        temp_pieces = self.pieces
+        temp_pieces = list(self.pieces)
         for y in range(self.height):
             for x in range(self.width):
 
                 # Attempt to find a piece for the new slot.
                 piece_found = False
                 for piece in temp_pieces:
-                    if piece.width == x and piece.height == y:
+                    if piece.x == x and piece.y == y:
                         display_string += str(piece.type)
                         temp_pieces.remove(piece)
                         piece_found = True
+                        break
 
                 # If a piece hasn't been found, place an empty space.
                 if piece_found is False:
