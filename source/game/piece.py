@@ -20,7 +20,7 @@ class Piece(Element):
         :param piece_type: What type of piece it is.
         :type piece_type: int
         """
-        Element.__init__(self, width, height)
+        super().__init__(width, height)
         self.player = player
         self.type = piece_type
         self.capture_count = 0

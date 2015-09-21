@@ -22,6 +22,6 @@ class Zone(Element):
         :param zone_type: What type of zone it is.
         :type zone_type: int
         """
-        Element.__init__(self, x, y)
+        super().__init__(x, y)
         self.type = zone_type
         self.collision = True  # All zones will have collision for now.
