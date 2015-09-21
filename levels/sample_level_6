@@ -1,3 +1,9 @@
+Players:
+P=1:role=human
+P=2:role=human
+P=3:role=human
+P=4:role=cpu:ai=wimpy
+Board:
 1 . . . . . . 2
 . . . . . . . .
 . . . . . . . .
