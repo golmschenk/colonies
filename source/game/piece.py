@@ -1,8 +1,9 @@
 """ Contains GamePiece object and methods """
 from source.game.logger import logger
+from source.game.element import Element
 
 
-class Piece:
+class Piece(Element):
 
     """ A Piece defines a generic unit that is involved in the game. """
 
@@ -19,9 +20,8 @@ class Piece:
         :param piece_type: What type of piece it is.
         :type piece_type: int
         """
+        super().__init__(width, height)
         self.player = player
-        self.x = width
-        self.y = height
         self.type = piece_type
         self.capture_count = 0
         self.move_count = 0

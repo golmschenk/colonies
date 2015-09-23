@@ -1,6 +1,7 @@
 """ Contains the singleton GameParser object and its global methods. """
 
 from .piece import Piece
+from .zone import Zone
 from .logger import logger
 from .player import Player
 
@@ -60,16 +61,12 @@ class Parser:
             '6': 6,
             '7': 7,
             '8': 8,
-            #'x': 0,
-            #'X': 0,
         }.get(char, 0)
 
     @staticmethod
     def is_piece(char):
         """
         Method used to determine if a character is a piece.
-        Currently, everything besides an empy space is
-        considered a piece.
 
         :param char: Input character to be considered.
         :type char: char
@@ -77,8 +74,29 @@ class Parser:
         :rtype: bool
         """
         return {
-            '.': False,
-        }.get(char, True)
+            '1': True,
+            '2': True,
+            '3': True,
+            '4': True,
+            '5': True,
+            '6': True,
+            '7': True,
+            '8': True,
+        }.get(char, False)
+
+    @staticmethod
+    def is_zone(char):
+        """
+        Method used to determine if a character is a zone.
+
+        :param char: Input character to be considered.
+        :type char: char
+        :return: If it is a zone.
+        :rtype: bool
+        """
+        return {
+            'X': True,
+        }.get(char, False)
 
     @staticmethod
     def find_player(player, game_board):
@@ -147,6 +165,12 @@ class Parser:
                                       height,
                                       char)
                     game_board.add_piece(new_piece)
+                elif Parser.is_zone(char):
+                    new_zone = Zone(width,
+                                    height,
+                                    char)
+                    game_board.add_zone(new_zone)
+
                 width += 1
             height += 1
 
