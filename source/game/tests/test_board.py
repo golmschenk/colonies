@@ -17,3 +17,27 @@ class TestBoard:
         post_piece_count = len(board.pieces)
 
         assert post_piece_count == pre_piece_count + 1
+
+    def test_add_zone_increases_zone_count(self):
+        """
+        Test that the add_zone function increases the number of zones.
+        """
+        board = Board()
+        pre_zone_count = len(board.zones)
+
+        board.add_zone(1)
+        post_zone_count = len(board.zones)
+
+        assert post_zone_count == pre_zone_count + 1
+
+    def test_add_player_increases_player_count(self):
+        """
+        Test that the add_player function increases the number of players.
+        """
+        board = Board()
+        pre_player_count = len(board.players)
+
+        board.add_player(1)
+        post_player_count = len(board.players)
+
+        assert post_player_count == pre_player_count + 1
