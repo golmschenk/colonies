@@ -21,8 +21,6 @@ class Console:
             logger.error("Player=%u has won!.", self.active_player.id)
             exit()
 
-        self.board.display_text_board()
-
     def get_next_player(self):
         """ Switches to the next avaiable player with pieces."""
         if self.active_player is None:
@@ -109,10 +107,11 @@ class Console:
     def play(self):
         """ Play the game of colonies. Perform moves from different players until the game is over. """
         while (1):
-            self.evaluate_board()
+            self.board.display_text_board()
             self.get_next_player()
             while self.take_turn() is not True:
                 pass
+            self.evaluate_board()
 
     def is_winner(self):
         """
