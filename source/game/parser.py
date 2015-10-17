@@ -1,42 +1,27 @@
-""" Contains the singleton GameParser object and its global methods. """
+""" Contains the singleton Parser object and its global methods. """
 
 from .piece import Piece
 from .zone import Zone
 from .logger import logger
-from .player import Player
+from .player import HumPlayer
+from .player import ComPlayer
+from enum import IntEnum
 
 
 class Parser:
 
     """
+
     Contains a set of methods to help create a Board from
     an input file.
     Sample File:
-
+    Players:
+    P=1:role=HumPlayer
+    P=2:role=ComPlayer:ai=super_fun
+    Board:
     1 . .
     . . .
     . . 2
-
-    or
-
-    1..1
-    2.X2
-    3x.3
-
-    TODO:
-    * Have area after the gameboard to supply input parameters for the players.
-
-    Ex:
-
-    Level:
-    1..1
-    2.X2
-    3x.3
-
-    Players:
-    1:role=Human
-    2:role=CPU,ai=super_fun
-    3:role=CPU,ai=kitty
     """
 
     @staticmethod
@@ -62,6 +47,30 @@ class Parser:
             '7': 7,
             '8': 8,
         }.get(char, 0)
+
+    class Role(IntEnum):
+
+        """  Describe types of roles for a Player for parsing. """
+        none = 0
+        human = 1
+        cpu = 2
+
+    @staticmethod
+    def get_role_from_string(string):
+        """
+        Take an input string and return a role.
+
+        :param string: string to convert to a role.
+        :type string: string
+        :return: The resulting Role.
+        :rtype: Role
+        """
+        if string == "human":
+            return Parser.Role.human
+        elif string == "cpu":
+            return Parser.Role.cpu
+        else:
+            return Parser.Role.none
 
     @staticmethod
     def is_piece(char):
@@ -133,31 +142,97 @@ class Parser:
         player_id = Parser.convert_char_to_player_id(char)
         player = Parser.find_player(player_id, game_board)
         if player is None and player_id is not 0:
-            player = Player(player_id)
+            player = HumPlayer(player_id)
             game_board.add_player(player)
-            logger.debug("Creating new player=%u", player.id)
+            logger.debug("Creating new undefined human player=%u", player.id)
         return player
 
     @staticmethod
-    def parse_file(file, game_board):
+    def parse_players(file, game_board):
         """
-        Method used to parse in input file and
-        populate a gameboard object with various game elements.
+        Method used to parse an input file,
+        populating all provided players with roles and
+        ai script names where needed.
 
         :param file: Level file to parse.
         :type file: File
-        :param game_board: Fully populated Board object.
+        :param game_board: Provided Board object.
         :type game_board: Board
         """
-        file = open(file, "r")
+        logger.debug("Parsing Players:")
 
-        # Operate over each line of the passed file and look for Pieces.
+        # If this file doesn't have the Players: format,
+        # then just reset it and parse the board itself.
+        line = file.readline()
+        if line.find("Players:") is not -1:
+            file.seek(0)
+            logger.debug("Players: not found. Parsing board normally.")
+            return
+
+        logger.debug("Found Players:")
+
+        # Parse each Player line from the Players: section,
+        # continuing until we find the end (Board:).
+        while line:
+            line = file.readline()
+            line = line.strip()
+
+            if line.find("Board:") is not -1:
+                logger.debug("Done parsing Players:")
+                return
+
+            # Parse a new player.
+            player_id = 0
+            role = "NULL"
+            ai = "NULL"
+            types = line.split(':')
+            for type in types:
+                value = type.split('=')
+                if value[0] is 'P':
+                    player_id = Parser.convert_char_to_player_id(value[1])
+                elif value[0] == "role":
+                    role = Parser.get_role_from_string(value[1])
+                elif value[0] == 'ai':
+                    ai = value[1]
+
+            # If a valid player has been detected, then add it.
+            if player_id is not 0 and role is not Parser.Role.none:
+                if role is Parser.Role.cpu:
+                    new_player = ComPlayer(player_id, ai)
+                    game_board.add_player(new_player)
+                else:
+                    new_player = HumPlayer(player_id)
+                    game_board.add_player(new_player)
+
+                logger.debug("Adding Player=%u, a %u type of Player with ai of %s.",
+                             player_id,
+                             role,
+                             ai)
+            else:
+                logger.error("Invalid Player %u, role=%u ai=%s.",
+                             player_id,
+                             role,
+                             ai)
+
+    @staticmethod
+    def parse_board(file, game_board):
+        """
+        Method used to parse in input file and
+        populate all included game elements.
+
+        :param file: Level file to parse.
+        :type file: File
+        :param game_board: Provided Board object.
+        :type game_board: Board
+        """
+        logger.debug("Parsing Board:")
         height = 0
         width = 0
         for line in file.readlines():
             width = 0
             for char in line.split():
-                # When one is found, add to the Board and perhaps add a Player.
+                # When one is found, add to the Board and perhaps add a
+                # Player.
                 if Parser.is_piece(char):
                     player = Parser.populate_player_from_char(char, game_board)
                     new_piece = Piece(player,
@@ -181,9 +256,26 @@ class Parser:
         game_board.width = width
         game_board.height = height
 
-        logger.debug("Parsed level name=%s with width=%u height=%u pieces=%u players=%u",
+        logger.debug("Parsed board name=%s with width=%u height=%u pieces=%u players=%u",
                      file.name,
                      width,
                      height,
                      len(game_board.pieces),
                      len(game_board.players))
+
+    @staticmethod
+    def parse_file(file, game_board):
+        """
+        Method used to parse in input file and
+        populate a gameboard object with various game elements
+        and players.
+
+        :param file: Level file to parse.
+        :type file: File
+        :param game_board: Fully populated Board object.
+        :type game_board: Board
+        """
+        file = open(file, "r")
+        Parser.parse_players(file, game_board)
+        Parser.parse_board(file, game_board)
+        file.close()

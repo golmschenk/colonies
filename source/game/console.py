@@ -21,8 +21,6 @@ class Console:
             logger.error("Player=%u has won!.", self.active_player.id)
             exit()
 
-        self.board.display_text_board()
-
     def get_next_player(self):
         """ Switches to the next avaiable player with pieces."""
         if self.active_player is None:
@@ -50,15 +48,14 @@ class Console:
         :return: If the turn is successful.
         :rtype: bool
         """
-        # Wait for piece input.
-        xy_in = input("Piece:")
-        xy = [int(s) for s in xy_in.split() if s.isdigit()]
-        if len(xy) is not 2:
+        # Obtain the move from the current player.
+        piece_coord, move_coord = self.active_player.make_move()
+        if len(piece_coord) is not 2:
             logger.error("Invalid piece selection for player=%u. Need two coordinates not %u.",
-                         self.active_player.id, len(xy))
+                         self.active_player.id, len(piece_coord))
             return False
-        x = xy[0]
-        y = xy[1]
+        x = piece_coord[0]
+        y = piece_coord[1]
 
         # Check to make sure the chosen piece exists.
         piece_found = False
@@ -77,15 +74,13 @@ class Console:
                          piece.player.id, self.active_player.id, x, y)
             return False
 
-        # Wait for move input.
-        xy_in = input("Move:")
-        xy = [int(s) for s in xy_in.split() if s.isdigit()]
-        if len(xy) is not 2:
+        # Handle the suggested move.
+        if len(move_coord) is not 2:
             logger.error("Invalid move selection for player=%u. Need two coordinates not %u.",
-                         self.active_player.id, len(xy))
+                         self.active_player.id, len(move_coord))
             return False
-        x = xy[0]
-        y = xy[1]
+        x = move_coord[0]
+        y = move_coord[1]
 
         # Check for piece collision.
         if self.does_cause_collision(x, y):
@@ -112,10 +107,11 @@ class Console:
     def play(self):
         """ Play the game of colonies. Perform moves from different players until the game is over. """
         while (1):
-            self.evaluate_board()
+            self.board.display_text_board()
             self.get_next_player()
             while self.take_turn() is not True:
                 pass
+            self.evaluate_board()
 
     def is_winner(self):
         """
