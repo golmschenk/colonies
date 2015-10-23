@@ -164,7 +164,7 @@ class Parser:
         # If this file doesn't have the Players: format,
         # then just reset it and parse the board itself.
         line = file.readline()
-        if line.find("Players:") is not -1:
+        if "Players:" not in line:
             file.seek(0)
             logger.debug("Players: not found. Parsing board normally.")
             return
@@ -177,7 +177,7 @@ class Parser:
             line = file.readline()
             line = line.strip()
 
-            if line.find("Board:") is not -1:
+            if "Board:" not in line:
                 logger.debug("Done parsing Players:")
                 return
 
