@@ -24,4 +24,5 @@ def main(argv):
     console = Console(sample_game_board)
     console.play()
 
-main(sys.argv)
+if __name__ == "__main__":
+    main(sys.argv)
