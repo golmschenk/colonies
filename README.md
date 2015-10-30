@@ -1,4 +1,4 @@
-# colonies 
+# colonies [![Build Status](https://travis-ci.org/Wilfcastle/colonies.svg)](https://travis-ci.org/Wilfcastle/colonies)
 
 An implementation of the classic game of colonies using Python.
 
