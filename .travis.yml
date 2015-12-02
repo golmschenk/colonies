@@ -1,6 +1,10 @@
 language: python
 python:
   - '3.5'
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
 script:
   - PYTHONPATH=.:djangoproject py.test -k "not djangoproject"
   - PYTHONPATH=. py.test djangoproject
