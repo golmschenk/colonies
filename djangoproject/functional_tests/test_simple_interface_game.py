@@ -14,9 +14,10 @@ class SimpleInterfaceGameTest(StaticLiveServerTestCase):
         # Kara and Iris decide to play a game of Colonies.
         # And so they visit the webapp.
         self.browser.get(self.live_server_url)
+        assert 'Colonies' in self.browser.title
 
         # They are greeted with a button to start a new game and they click it.
-        self.browser.find_element_by_id('new_game_button')
+        new_game_button = self.browser.find_element_by_id('new_game_button')
 
         # They now see a game board displayed.
         self.fail('Finish the test!')
