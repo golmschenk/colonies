@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'colonies.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config()
+    'default': dj_database_url.config(default='postgres://postgres@localhost/colonies')
 }
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()

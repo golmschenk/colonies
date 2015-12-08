@@ -10,7 +10,7 @@ class SimpleInterfaceGameTest(StaticLiveServerTestCase):
     def tearDown(self):
         self.browser.quit()
 
-    def test_can_play_a_game_through_the_interface(self):
+    def test_can_play_a_game_through_the_interface_with_mocked_core_game_code(self):
         # Kara and Iris decide to play a game of Colonies.
         # And so they visit the webapp.
         self.browser.get(self.live_server_url)
