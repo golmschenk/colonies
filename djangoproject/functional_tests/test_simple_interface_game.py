@@ -1,17 +1,10 @@
 """
 Functional tests to check the interface during a basic game.
 """
-from selenium import webdriver
-from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from .base_functional_test import BaseFunctionalTest
 
 
-class SimpleInterfaceGameTest(StaticLiveServerTestCase):
-
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-
-    def tearDown(self):
-        self.browser.quit()
+class TestSimpleInterfaceGame(BaseFunctionalTest):
 
     def test_can_play_a_game_through_the_interface_with_mocked_core_game_code(self):
         # Kara and Iris decide to play a game of Colonies.
