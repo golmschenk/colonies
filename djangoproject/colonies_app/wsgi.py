@@ -17,12 +17,8 @@ from dj_static import Cling
 path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 if path not in sys.path:
     sys.path.insert(1, path)
-path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if path not in sys.path:
-    sys.path.insert(1, path)
-print(path)
 del path
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "colonies.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "colonies_app.settings")
 
 application = Cling(get_wsgi_application())
