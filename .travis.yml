@@ -10,8 +10,7 @@ before_script:
 - psql -c 'create database colonies;' -U postgres
 
 script:
-- PYTHONPATH=.:djangoproject py.test -k "not djangoproject"
-- PYTHONPATH=. py.test djangoproject
+- py.test
 
 notifications:
   slack:
