@@ -98,10 +98,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'colonies_app', 'static'),)
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)

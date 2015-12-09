@@ -1,5 +1,7 @@
 ### Project specific
-/virtualenv
+virtualenv
+djangoproject/colonies_app/static/bower_components/*
+!djangoproject/colonies_app/static/bower_components/.keep
 
 ### Python template
 # Byte-compiled / optimized / DLL files
