@@ -1,0 +1,3 @@
+"""
+The Colonies project module.
+"""

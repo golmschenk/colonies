@@ -1,3 +1,6 @@
+"""
+Functional tests to check the interface during a basic game.
+"""
 from selenium import webdriver
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 

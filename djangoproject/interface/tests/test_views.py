@@ -1,3 +1,6 @@
+"""
+The view functions for the interface app.
+"""
 from django.test import TestCase
 
 
