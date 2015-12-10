@@ -14,8 +14,14 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
 
         # They are greeted with a button to start a new game and they click it.
         new_game_button = self.browser.find_element_by_id('new_game_button')
+        new_game_button.click()
 
-        # They now see a game board displayed.
+        # They are redirected to a game page and see a game board displayed.
+        assert 'Game' in self.browser.title
+        board_table = self.browser.find_element_by_id('board_table')
+        for row in board_table.find_elements_by_tag_name('tr'):
+            for cell in row.find_elements_by_tag_name('td'):
+                assert any(character in cell for character in ['1', '2', '.'])
         self.fail('Finish the test!')
 
         # Kara, having never played, moves her only piece to the center of the board.
