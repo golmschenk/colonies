@@ -21,6 +21,6 @@ from interface.views import HomeView
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', HomeView.as_view()),
+    url(r'^$', HomeView.as_view(), name='home'),
     url(r'^interface', include(interface_urls)),
 ]

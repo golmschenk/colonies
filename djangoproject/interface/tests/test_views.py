@@ -7,7 +7,7 @@ from django.test import TestCase
 
 class TestHomePage(TestCase):
     def test_home_page_renders_home_template(self):
-        response = self.client.get('/')
+        response = self.client.get(reverse('home'))
         self.assertTemplateUsed(response, 'home.html')
 
 
