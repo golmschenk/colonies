@@ -6,5 +6,5 @@ from django.conf.urls import url
 from interface.views import HomeView, GameView
 
 urlpatterns = [
-    url(r'^/game', GameView.as_view(), name='game'),
+    url(r'^game', GameView.as_view(), name='game'),
 ]

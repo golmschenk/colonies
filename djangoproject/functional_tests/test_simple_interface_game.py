@@ -19,9 +19,10 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         # They are redirected to a game page and see a game board displayed.
         assert 'Game' in self.browser.title
         board_table = self.browser.find_element_by_id('board_table')
+        board_table.find_element_by_tag_name('tr').find_element_by_tag_name('td')  # - At least one board tile exists.
         for row in board_table.find_elements_by_tag_name('tr'):
             for cell in row.find_elements_by_tag_name('td'):
-                assert any(character in cell for character in ['1', '2', '.'])
+                assert any(character in cell for character in ['1', '2', '.'])  # - All elements make sense.
         self.fail('Finish the test!')
 
         # Kara, having never played, moves her only piece to the center of the board.
