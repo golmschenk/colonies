@@ -37,10 +37,9 @@ class TestNewGamePage(TestCase):
         assert url == reverse('game', kwargs={'game_id': mock_game.id})
 
 
-
 class TestGamePage(TestCase):
     def test_game_page_renders_game_template(self):
-        response = self.client.get(reverse('game'))
+        response = self.client.get(reverse('game', kwargs={'game_id': 2}))
         self.assertTemplateUsed(response, 'game.html')
 
     def test_template_has_no_table_cells_when_there_is_no_board_argument(self):

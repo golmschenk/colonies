@@ -25,6 +25,11 @@ class NewGameView(RedirectView):
     """
     The redirect view to create a new game.
     """
-    def get_redirect_url(self, *args, **kwargs):
+    def get_redirect_url(self):
+        """
+        Creates the new game an redirects to the game view with the new game's ID passed.
+        :return: The redirect url of the new game.
+        :rtype: str
+        """
         game = Game.objects.create()
         return reverse('game', kwargs={'game_id': game.id})
