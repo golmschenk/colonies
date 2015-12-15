@@ -26,21 +26,21 @@ class TestNewGamePage(TestCase):
         assert mock_game_class.objects.create.called
 
     @patch('interface.views.Game.objects.create')
-    def test_generates_correct_url_to_game_with_new_game_id(self, mock_create):
+    def test_generates_correct_url_to_game_with_new_game_pk(self, mock_create):
         mock_game = Mock()
-        mock_game.id = 2
+        mock_game.pk = 2
         mock_create.return_value = mock_game
 
         new_game_view = NewGameView()
         url = new_game_view.get_redirect_url()
 
-        assert url == reverse('game', kwargs={'game_id': mock_game.id})
+        assert url == reverse('game', kwargs={'game_pk': mock_game.pk})
 
 
 class TestGamePage(TestCase):
     @patch('interface.views.get_object_or_404')
     def test_game_page_renders_game_template(self, mock_get_object_or_404):
-        response = self.client.get(reverse('game', kwargs={'game_id': 2}))
+        response = self.client.get(reverse('game', kwargs={'game_pk': 2}))
 
         self.assertTemplateUsed(response, 'game.html')
 
@@ -63,13 +63,13 @@ class TestGamePage(TestCase):
 
     @patch('interface.views.get_object_or_404')
     @patch('interface.views.Game')
-    def test_game_id_is_retrieve_by_passed_id_and_set_in_context(self, mock_game_class, mock_get_object_or_404):
+    def test_game_pk_is_retrieve_by_passed_pk_and_set_in_context(self, mock_game_class, mock_get_object_or_404):
         game_view = GameView()
         mock_game = Mock()
         mock_game.board_rows = ['1.2']
         mock_get_object_or_404.return_value = mock_game
 
-        context = game_view.get_context_data(**{'game_id': 2})
+        context = game_view.get_context_data(**{'game_pk': 2})
 
         assert mock_get_object_or_404.called
         assert mock_get_object_or_404.call_args == ((mock_game_class,), {'pk': 2})

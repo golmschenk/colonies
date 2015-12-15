@@ -27,7 +27,7 @@ class NewGameView(RedirectView):
         :rtype: str
         """
         game = Game.objects.create()
-        return reverse('game', kwargs={'game_id': game.id})
+        return reverse('game', kwargs={'game_pk': game.pk})
 
 
 class GameView(TemplateView):
@@ -36,14 +36,14 @@ class GameView(TemplateView):
     """
     template_name = 'game.html'
 
-    def get_context_data(self, game_id):
+    def get_context_data(self, game_pk):
         """
         Prepares the game data to pass as the context to the template.
 
-        :param game_id: The game to retrieve.
-        :type game_id: Game
+        :param game_pk: The game to retrieve.
+        :type game_pk: Game
         :return: The context of the template.
         :rtype: dict
         """
-        game = get_object_or_404(Game, pk=game_id)
+        game = get_object_or_404(Game, pk=game_pk)
         return {'board_rows': game.board_rows}
