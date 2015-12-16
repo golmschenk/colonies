@@ -23,13 +23,13 @@ class TestNewGamePage(TestCase):
     @patch('interface.views.Game')
     def test_creates_game(self, mock_game_class, mock_reverse):
         response = self.client.get(reverse('new-game'))
-        assert mock_game_class.objects.create.called
+        assert mock_game_class.objects.create_game.called
 
-    @patch('interface.views.Game.objects.create')
-    def test_generates_correct_url_to_game_with_new_game_pk(self, mock_create):
+    @patch('interface.views.Game.objects.create_game')
+    def test_generates_correct_url_to_game_with_new_game_pk(self, mock_create_game):
         mock_game = Mock()
         mock_game.pk = 2
-        mock_create.return_value = mock_game
+        mock_create_game.return_value = mock_game
 
         new_game_view = NewGameView()
         url = new_game_view.get_redirect_url()

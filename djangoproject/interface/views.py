@@ -26,7 +26,7 @@ class NewGameView(RedirectView):
         :return: The redirect url of the new game.
         :rtype: str
         """
-        game = Game.objects.create()
+        game = Game.objects.create_game()
         return reverse('game', kwargs={'game_pk': game.pk})
 
 
