@@ -30,3 +30,13 @@ class TestGameModel(TestCase):
         board_rows = game.board_rows
 
         assert board_rows == ['1..', '...', '..2']
+
+    @patch('interface.models.CoreGame')
+    def test_game_manager_creates_with_core_game_object_default_put_into_data(self, mock_core_game_class):
+        mock_core_game = 'fake core game'
+        mock_core_game_class.return_value = mock_core_game
+
+        game = Game.objects.create_game()
+
+        assert game == Game.objects.first()
+        assert pickle.loads(game.data) == mock_core_game
