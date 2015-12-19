@@ -47,3 +47,11 @@ class GameView(TemplateView):
         """
         game = get_object_or_404(Game, pk=game_pk)
         return {'board_rows': game.board_rows}
+
+
+class MoveView(RedirectView):
+    """
+    The redirect view to make a move.
+    """
+    def get_redirect_url(self, game_pk):
+        return reverse('game', kwargs={'game_pk': game_pk})

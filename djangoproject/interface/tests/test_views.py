@@ -9,7 +9,7 @@ from django.shortcuts import render
 from django.http import HttpRequest
 from django.test import TestCase
 
-from interface.views import NewGameView, GameView
+from interface.views import NewGameView, GameView, MoveView
 
 
 class TestHomePage(TestCase):
@@ -75,3 +75,12 @@ class TestGamePage(TestCase):
         assert mock_get_object_or_404.call_args == ((mock_game_class,), {'pk': 2})
         assert context['board_rows'] == mock_game.board_rows
 
+
+class TestMovePage(TestCase):
+    def test_redirects_to_game_view_with_passed_game_pk(self):
+        game_pk = 2
+
+        move_view = MoveView()
+        url = move_view.get_redirect_url(game_pk=game_pk)
+
+        assert url == reverse('game', kwargs={'game_pk': game_pk})
