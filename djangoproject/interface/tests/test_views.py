@@ -77,10 +77,29 @@ class TestGamePage(TestCase):
 
 
 class TestMovePage(TestCase):
-    def test_redirects_to_game_view_with_passed_game_pk(self):
+    @patch('interface.views.get_object_or_404')
+    def test_redirects_to_game_view_with_passed_game_pk(self, _):
         game_pk = 2
-
         move_view = MoveView()
-        url = move_view.get_redirect_url(game_pk=game_pk)
+
+        url = move_view.get_redirect_url(game_pk, 0, 0, 0, 0)
 
         assert url == reverse('game', kwargs={'game_pk': game_pk})
+
+    @patch('interface.views.get_object_or_404')
+    @patch('interface.views.Game')
+    def test_retrieves_game_and_calls_its_move_with_passed_arguments(self, mock_game_class, mock_get_object_or_404):
+        game_pk = 2
+        current_x, current_y, new_x, new_y = 1, 2, 3, 4
+        move_view = MoveView()
+        mock_game = Mock()
+        mock_get_object_or_404.return_value = mock_game
+
+        url = move_view.get_redirect_url(game_pk=game_pk, current_x=current_x, current_y=current_y,
+                                         new_x=new_x, new_y=new_y)
+
+        assert mock_get_object_or_404.call_args == ((mock_game_class,), {'pk': 2})
+        assert mock_game.move.call_args == ((), {'current_x': current_x, 'current_y': current_y,
+                                                 'new_x': new_x, 'new_y': new_y})
+
+
