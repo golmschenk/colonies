@@ -72,4 +72,5 @@ class MoveView(RedirectView):
         """
         game = get_object_or_404(Game, pk=game_pk)
         game.move(current_x=current_x, current_y=current_y, new_x=new_x, new_y=new_y)
+        game.save()
         return reverse('game', kwargs={'game_pk': game_pk})

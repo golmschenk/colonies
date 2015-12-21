@@ -102,4 +102,15 @@ class TestMovePage(TestCase):
         assert mock_game.move.call_args == ((), {'current_x': current_x, 'current_y': current_y,
                                                  'new_x': new_x, 'new_y': new_y})
 
+    @patch('interface.views.get_object_or_404')
+    def test_saves_the_new_game_object(self, mock_get_object_or_404):
+        game_pk = 2
+        current_x, current_y, new_x, new_y = 1, 2, 3, 4
+        move_view = MoveView()
+        mock_game = Mock()
+        mock_get_object_or_404.return_value = mock_game
 
+        move_view.get_redirect_url(game_pk=game_pk, current_x=current_x, current_y=current_y,
+                                         new_x=new_x, new_y=new_y)
+
+        assert mock_game.save.called
