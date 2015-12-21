@@ -44,3 +44,20 @@ class Game(models.Model):
         """
         unpickled_data = pickle.loads(self.data)
         return unpickled_data.board.splitlines()
+
+    def move(self, current_x, current_y, new_x, new_y):
+        """
+        Executes the move of a piece.
+
+        :param current_x: Current x position of piece to move.
+        :type current_x: int
+        :param current_y: Current y position of piece to move.
+        :type current_y: int
+        :param new_x: The x position to move the piece to.
+        :type new_x: int
+        :param new_y: The y position to move the piece to.
+        :type new_y: int
+        """
+        core_game = pickle.loads(self.data)
+        core_game.move(current_x=current_x, current_y=current_y, new_x=new_x, new_y=new_y)
+        self.data = pickle.dumps(core_game)

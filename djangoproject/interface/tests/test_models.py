@@ -40,3 +40,19 @@ class TestGameModel(TestCase):
 
         assert game == Game.objects.first()
         assert pickle.loads(game.data) == mock_core_game
+
+    @patch('interface.models.pickle.dumps')
+    @patch('interface.models.pickle.loads')
+    def test_move_calls_datas_move(self, mock_loads, mock_dumps):
+        mock_core_game = Mock()
+        mock_loads.return_value = mock_core_game
+        mock_dumps.return_value = 'dumps return'
+        game = Game()
+        game.data = 'game data'
+
+        game.move(current_x=1, current_y=2, new_x=3, new_y=4)
+
+        assert mock_loads.call_args == (('game data',), {})
+        assert mock_core_game.move.called
+        assert mock_core_game.move.call_args == ((), {'current_x': 1, 'current_y': 2, 'new_x': 3, 'new_y': 4})
+        assert game.data == 'dumps return'
