@@ -53,24 +53,32 @@ class MoveView(RedirectView):
     """
     The redirect view to make a move.
     """
-    def get_redirect_url(self, game_pk, current_x, current_y, new_x, new_y):
+    def post(self, request, *args, **kwargs):
         """
-        Executes move on the game for a given move request. Redirects to the game view after.
+        Executes move on the game for a given move request. Continues to redirect after.
+
+        :param request: The post request data. Should contain the move data in the POST dictionary.
+        :type request: HttpRequest
+        :param args: Passed args.
+        :type args: list
+        :param kwargs: Passed kwargs. Should contain the game primary key.
+        :type kwargs: dict
+        :return: The HTTP response
+        :rtype: HttpResponse
+        """
+        game = get_object_or_404(Game, pk=kwargs['game_pk'])
+        game.move(current_x=request.POST['current_x'], current_y=request.POST['current_y'],
+                  new_x=request.POST['new_x'], new_y=request.POST['new_y'])
+        game.save()
+        return super().post(request, *args, **kwargs)
+
+    def get_redirect_url(self, game_pk):
+        """
+        Redirects to the game view after the move.
 
         :param game_pk: The pk of the game to retrieve.
         :type game_pk: int
-        :param current_x: Current x position of piece to move.
-        :type current_x: int
-        :param current_y: Current y position of piece to move.
-        :type current_y: int
-        :param new_x: The x position to move the piece to.
-        :type new_x: int
-        :param new_y: The y position to move the piece to.
-        :type new_y: int
         :return: The game view url.
         :rtype: str
         """
-        game = get_object_or_404(Game, pk=game_pk)
-        game.move(current_x=current_x, current_y=current_y, new_x=new_x, new_y=new_y)
-        game.save()
         return reverse('game', kwargs={'game_pk': game_pk})

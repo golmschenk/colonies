@@ -6,7 +6,7 @@ from unittest.mock import patch, Mock
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
 
 from interface.views import NewGameView, GameView, MoveView
@@ -77,12 +77,11 @@ class TestGamePage(TestCase):
 
 
 class TestMovePage(TestCase):
-    @patch('interface.views.get_object_or_404')
-    def test_redirects_to_game_view_with_passed_game_pk(self, _):
+    def test_redirects_to_game_view_with_passed_game_pk(self):
         game_pk = 2
         move_view = MoveView()
 
-        url = move_view.get_redirect_url(game_pk, 0, 0, 0, 0)
+        url = move_view.get_redirect_url(game_pk)
 
         assert url == reverse('game', kwargs={'game_pk': game_pk})
 
@@ -91,26 +90,32 @@ class TestMovePage(TestCase):
     def test_retrieves_game_and_calls_its_move_with_passed_arguments(self, mock_game_class, mock_get_object_or_404):
         game_pk = 2
         current_x, current_y, new_x, new_y = 1, 2, 3, 4
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {'current_x': current_x, 'current_y': current_y, 'new_x': new_x, 'new_y': new_y}
         move_view = MoveView()
         mock_game = Mock()
         mock_get_object_or_404.return_value = mock_game
 
-        url = move_view.get_redirect_url(game_pk=game_pk, current_x=current_x, current_y=current_y,
-                                         new_x=new_x, new_y=new_y)
+        move_view.post(request, game_pk=game_pk)
 
         assert mock_get_object_or_404.call_args == ((mock_game_class,), {'pk': 2})
         assert mock_game.move.call_args == ((), {'current_x': current_x, 'current_y': current_y,
                                                  'new_x': new_x, 'new_y': new_y})
+        assert mock_game.save.called
 
     @patch('interface.views.get_object_or_404')
-    def test_saves_the_new_game_object(self, mock_get_object_or_404):
+    @patch('interface.views.Game')
+    def test_post_handler_returns_redirect(self, mock_game_class, mock_get_object_or_404):
         game_pk = 2
         current_x, current_y, new_x, new_y = 1, 2, 3, 4
+        request = HttpRequest()
+        request.method = 'POST'
+        request.POST = {'current_x': current_x, 'current_y': current_y, 'new_x': new_x, 'new_y': new_y}
         move_view = MoveView()
         mock_game = Mock()
         mock_get_object_or_404.return_value = mock_game
 
-        move_view.get_redirect_url(game_pk=game_pk, current_x=current_x, current_y=current_y,
-                                         new_x=new_x, new_y=new_y)
+        response = move_view.post(request, game_pk=game_pk)
 
-        assert mock_game.save.called
+        assert response.url == reverse('game', kwargs={'game_pk': game_pk})
