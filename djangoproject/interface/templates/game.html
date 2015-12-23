@@ -4,7 +4,7 @@
 
 {% block content %}
     <div id="title_div" class="page-header">
-        <h1>Game</h1>
+        <h1>Game {{ game_pk }}</h1>
     </div>
     <table id="board_table" class="table">
         {% for board_row in board_rows %}

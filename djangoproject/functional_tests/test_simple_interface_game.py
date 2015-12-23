@@ -3,11 +3,14 @@ Functional tests to check the interface during a basic game.
 """
 from unittest.mock import patch, Mock
 
+from django.test import override_settings
+
 from .base_functional_test import BaseFunctionalTest
 
 
 class TestSimpleInterfaceGame(BaseFunctionalTest):
 
+    @override_settings(DEBUG=True)
     @patch('interface.models.pickle')
     @patch('interface.models.CoreGame')
     def test_can_play_a_game_through_the_interface_with_mocked_core_game_code(self, mock_core_game_class, mock_pickle):
@@ -36,7 +39,7 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
                 assert any(character in cell.text for character in ['1', '2', '.'])  # - All elements make sense.
 
         # Kara, having never played, moves her only piece to the center of the board.
-        def move_side_effect():
+        def move_side_effect(**kwargs):
             mock_core_game.board = '.....\n.....\n..1..\n.....\n....2'
         mock_core_game.move.side_effect = move_side_effect
         current_x_position = self.browser.find_element_by_id('current_x_position')
@@ -57,6 +60,9 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         assert '1' == rows[2].find_elements_by_tag_name('td')[2].text
 
         # Iris, wanting to teach through example, promptly captures Kara's piece.
+        def move_side_effect(**kwargs):
+            mock_core_game.board = '.....\n.....\n..2..\n...2.\n.....'
+        mock_core_game.move.side_effect = move_side_effect
         current_x_position = self.browser.find_element_by_id('current_x_position')
         current_x_position.send_keys('4')
         current_y_position = self.browser.find_element_by_id('current_y_position')
@@ -69,8 +75,15 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         move_button.click()
 
         # Kara sees that her piece has been converted to Iris' team.
-        self.fail('Finish the test!')
+        board_table = self.browser.find_element_by_id('board_table')
+        rows = board_table.find_elements_by_tag_name('tr')
+        assert '.' == rows[4].find_elements_by_tag_name('td')[4].text
+        assert '2' == rows[3].find_elements_by_tag_name('td')[3].text
+        assert '2' == rows[2].find_elements_by_tag_name('td')[2].text
 
         # A display showing ending points comes up.
+        status = self.browser.find_element_by_id('game_status')
+        assert status == 'Player 2 wins! Player 1: 0 | Player 2: 2'
 
         # Now that Kara knows a bit more, she's determined to try again... but later. For now, they exit.
+        self.browser.close()
