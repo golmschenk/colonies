@@ -31,6 +31,17 @@ class TestGameModel(TestCase):
 
         assert board_rows == ['1..', '...', '..2']
 
+    @patch('interface.models.pickle.loads')
+    def test_can_retrieve_the_game_status_from_game_data(self, mock_loads):
+        game = Game()
+        game_data = Mock()
+        game_data.status = 'status string'
+        mock_loads.return_value = game_data
+
+        game_status = game.status
+
+        assert game_status == 'status string'
+
     @patch('interface.models.CoreGame')
     def test_game_manager_creates_with_core_game_object_default_put_into_data(self, mock_core_game_class):
         mock_core_game = 'fake core game'

@@ -45,6 +45,17 @@ class Game(models.Model):
         unpickled_data = pickle.loads(self.data)
         return unpickled_data.board.splitlines()
 
+    @property
+    def status(self):
+        """
+        Retrieves the status from the pickled game data.
+
+        :return: The status string
+        :rtype: str
+        """
+        unpickled_data = pickle.loads(self.data)
+        return unpickled_data.status
+
     def move(self, current_x, current_y, new_x, new_y):
         """
         Executes the move of a piece.

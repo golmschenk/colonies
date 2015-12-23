@@ -62,6 +62,7 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         # Iris, wanting to teach through example, promptly captures Kara's piece.
         def move_side_effect(**kwargs):
             mock_core_game.board = '.....\n.....\n..2..\n...2.\n.....'
+            mock_core_game.status = 'Player 2 wins! Player 1: 0 | Player 2: 2'
         mock_core_game.move.side_effect = move_side_effect
         current_x_position = self.browser.find_element_by_id('current_x_position')
         current_x_position.send_keys('4')
@@ -83,7 +84,7 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
 
         # A display showing ending points comes up.
         status = self.browser.find_element_by_id('game_status')
-        assert status == 'Player 2 wins! Player 1: 0 | Player 2: 2'
+        assert 'Player 2 wins! Player 1: 0 | Player 2: 2' in status.text
 
         # Now that Kara knows a bit more, she's determined to try again... but later. For now, they exit.
         self.browser.close()

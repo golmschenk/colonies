@@ -44,6 +44,7 @@ class TestGamePage(TestCase):
 
         self.assertTemplateUsed(response, 'game.html')
         assert response.context['game_pk'] == '2'
+        assert 'game_status' in response.context
 
     def test_template_has_no_table_cells_when_there_is_no_board_argument(self):
         response = render(HttpRequest(), 'game.html', context={'game_pk': 2})
