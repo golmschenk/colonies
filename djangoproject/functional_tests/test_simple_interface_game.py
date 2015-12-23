@@ -36,6 +36,9 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
                 assert any(character in cell.text for character in ['1', '2', '.'])  # - All elements make sense.
 
         # Kara, having never played, moves her only piece to the center of the board.
+        def move_side_effect():
+            mock_core_game.board = '.....\n.....\n..1..\n.....\n....2'
+        mock_core_game.move.side_effect = move_side_effect
         current_x_position = self.browser.find_element_by_id('current_x_position')
         current_x_position.send_keys('0')
         current_y_position = self.browser.find_element_by_id('current_y_position')
