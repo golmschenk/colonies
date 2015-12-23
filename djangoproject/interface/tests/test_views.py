@@ -6,7 +6,7 @@ from unittest.mock import patch, Mock
 
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest
 from django.test import TestCase
 
 from interface.views import NewGameView, GameView, MoveView
@@ -43,9 +43,10 @@ class TestGamePage(TestCase):
         response = self.client.get(reverse('game', kwargs={'game_pk': 2}))
 
         self.assertTemplateUsed(response, 'game.html')
+        assert response.context['game_pk'] == '2'
 
     def test_template_has_no_table_cells_when_there_is_no_board_argument(self):
-        response = render(HttpRequest(), 'game.html')
+        response = render(HttpRequest(), 'game.html', context={'game_pk': 2})
 
         soup = BeautifulSoup(response.content, 'html.parser')
         board_table = soup.find(id='board_table')
@@ -55,7 +56,7 @@ class TestGamePage(TestCase):
     def test_template_has_table_cells_when_there_is_a_board_argument(self):
         board_rows = ['1.2']
 
-        response = render(HttpRequest(), 'game.html', context={'board_rows': board_rows})
+        response = render(HttpRequest(), 'game.html', context={'board_rows': board_rows, 'game_pk': 2})
         soup = BeautifulSoup(response.content, 'html.parser')
         board_table = soup.find(id='board_table')
 
