@@ -2,6 +2,7 @@
 Functional tests to check the interface during a basic game.
 """
 from unittest.mock import patch, Mock
+from unittest import skip
 
 from .base_functional_test import BaseFunctionalTest
 
@@ -86,6 +87,7 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         # Now that Kara knows a bit more, she's determined to try again... but later. For now, they exit.
         self.browser.close()
 
+    @skip('Not intergrated yet')
     def test_can_play_a_game_through_the_interface(self):
         # Kara and Iris decide to play a game of Colonies.
         # And so they visit the webapp.
