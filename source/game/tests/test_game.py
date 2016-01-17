@@ -1,4 +1,6 @@
 """Items related to testing the console class."""
+import pickle
+
 from source.game.piece import Piece
 from source.game.game import Game
 from source.game.player import Player
@@ -87,3 +89,13 @@ class TestGame:
         assert resp.move_status is True
         resp = restored_game.make_move([4,4], [6,6])
         assert resp.move_status is True
+
+    def test_can_be_pickled(self):
+        board = Board()
+        board.add_player(Player(0))
+        game = Game.new_game(board)
+
+        pickled_data = pickle.dumps(game)
+        restored_game = pickle.loads(pickled_data)
+
+        assert restored_game.console.board.create_display_string() == game.console.board.create_display_string()

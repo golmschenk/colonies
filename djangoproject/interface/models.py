@@ -5,10 +5,10 @@ import pickle
 
 from django.db import models
 
-import sys  # For core game mock
-from unittest.mock import Mock  # For core game mock
-sys.modules['CoreGame'] = Mock()  # For core game mock
-import CoreGame
+from source.game.game import Game as CoreGame
+from source.game.player import Player as CorePlayer
+from source.game.board import Board as CoreBoard
+from source.game.piece import Piece as CorePiece
 
 
 class GameManager(models.Manager):
@@ -22,9 +22,26 @@ class GameManager(models.Manager):
         :return: The newly created game object.
         :rtype: Game
         """
-        game_data = pickle.dumps(CoreGame())
+        game_data = pickle.dumps(CoreGame.new_game(self.default_board()))
         game = self.create(data=game_data)
         return game
+
+    def default_board(self):
+        """
+        Setups a default board to be used.
+
+        :return: The board object.
+        :rtype: CoreBoard
+        """
+        only_board = '1....\n.....\n.....\n.....\n....2'
+        player0 = CorePlayer(0)
+        player1 = CorePlayer(1)
+        board = CoreBoard(width=5, height=5)
+        board.add_player(player0)
+        board.add_player(player1)
+        board.add_piece(CorePiece(player0, 0, 0, 0))
+        board.add_piece(CorePiece(player1, 4, 4, 1))
+        return board
 
 
 class Game(models.Model):
@@ -43,7 +60,7 @@ class Game(models.Model):
         :rtype: list[str]
         """
         unpickled_data = pickle.loads(self.data)
-        return unpickled_data.board.splitlines()
+        return unpickled_data.board.replace(' ', '').splitlines()
 
     @property
     def status(self):
@@ -70,5 +87,5 @@ class Game(models.Model):
         :type new_y: int
         """
         core_game = pickle.loads(self.data)
-        core_game.move(current_x=current_x, current_y=current_y, new_x=new_x, new_y=new_y)
+        core_game.make_move((current_x, current_y), (new_x, new_y))
         self.data = pickle.dumps(core_game)

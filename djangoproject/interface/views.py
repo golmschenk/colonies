@@ -67,8 +67,8 @@ class MoveView(RedirectView):
         :rtype: HttpResponse
         """
         game = get_object_or_404(Game, pk=kwargs['game_pk'])
-        game.move(current_x=request.POST['current_x'], current_y=request.POST['current_y'],
-                  new_x=request.POST['new_x'], new_y=request.POST['new_y'])
+        game.move(current_x=int(request.POST['current_x']), current_y=int(request.POST['current_y']),
+                  new_x=int(request.POST['new_x']), new_y=int(request.POST['new_y']))
         game.save()
         return super().post(request, *args, **kwargs)
 
