@@ -1,1 +1,1 @@
-web: cd djangoproject && gunicorn colonies.wsgi --log-file -
+web: cd djangoproject && gunicorn --pythonpath .. colonies.wsgi --log-file -
