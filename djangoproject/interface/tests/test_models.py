@@ -76,8 +76,8 @@ class TestGameModel(TestCase):
         game.move(current_x=1, current_y=2, new_x=3, new_y=4)
 
         assert mock_loads.call_args == (('game data',), {})
-        assert mock_core_game.move.called
-        assert mock_core_game.move.call_args == ((), {'current_x': 1, 'current_y': 2, 'new_x': 3, 'new_y': 4})
+        assert mock_core_game.make_move.called
+        assert mock_core_game.make_move.call_args == (((1, 2), (3, 4)), {})
         assert game.data == 'dumps return'
 
     @patch('interface.models.CoreBoard')
