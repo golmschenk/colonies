@@ -17,6 +17,8 @@ class Game:
         :type Console
         """
         self.console = console
+        self.status = True
+        self.board = self.console.board.create_display_string()
         
     @staticmethod
     def new_game(board):
@@ -36,7 +38,7 @@ class Game:
         :return: Current state object.
         :rtype: State
         """        
-        return State(self.console.board.create_display_string)
+        return State(self.console.board.create_display_string())
     
     @staticmethod
     def restore(game):
@@ -60,7 +62,9 @@ class Game:
         :rtype: Response
         """
         status = self.console.passive_move_interface(piece_coord, move_coord)
-        resp  = Response(status, "No message... Yet.", self.obtain_state)
+        resp  = Response(status, "No message... Yet.", self.obtain_state())
+        self.status = status
+        self.board = self.obtain_state().state_string
         return resp
 
 class State:

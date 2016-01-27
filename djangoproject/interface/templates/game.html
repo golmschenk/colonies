@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Colonies - Game{% endblock %}
+
+{% block content %}
+    <div id="title_div" class="page-header">
+        <h1>Game {{ game_pk }}</h1>
+    </div>
+    <table id="board_table" class="table">
+        {% for board_row in board_rows %}
+            <tr>
+                {% for board_cell in board_row %}
+                    <td>
+                        {{ board_cell }}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    <form action="{% url 'move' game_pk %}" class='form-horizontal' method="post">
+        {% csrf_token %}
+        <div class="row form-group">
+            <div class="col-md-2">
+                <input type="text" name="current_x" class="form-control" id="current_x_position" placeholder="Current X position">
+            </div>
+            <div class="col-md-2">
+                <input type="text" name="current_y" class="form-control" id="current_y_position" placeholder="Current Y position">
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-2">
+                <input type="text" name="new_x" class="form-control" id="new_x_position" placeholder="New X position">
+            </div>
+            <div class="col-md-2">
+                <input type="text" name="new_y" class="form-control" id="new_y_position" placeholder="New Y position">
+            </div>
+            <div class="col-md-2">
+                <input type="submit" id="move_button" class="btn btn-primary" role="button" value="Move">
+            </div>
+        </div>
+    </form>
+    <p id="game_status">Status: {{ game_status }}</p>
+{% endblock %}
