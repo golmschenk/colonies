@@ -13,8 +13,14 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import dj_database_url
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Add the project level path
+path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if path not in sys.path:
+    sys.path.insert(1, path)
+del path
 
 
 # Quick-start development settings - unsuitable for production
@@ -75,7 +81,7 @@ WSGI_APPLICATION = 'colonies_app.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': dj_database_url.config(default='postgres://postgres@localhost/colonies')
+    'default': dj_database_url.config(default='postgres://postgres:postgres@localhost/colonies')
 }
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()

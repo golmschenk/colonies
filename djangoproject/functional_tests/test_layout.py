@@ -20,6 +20,6 @@ class TestLayout(BaseFunctionalTest):
         self.assertAlmostEqual(
             title_div.location['x'] + title_div.size['width'] / 2,
             512,
-            delta=5
+            delta=10
         )
         self.assertLess(title_div.size['width'], 950)
