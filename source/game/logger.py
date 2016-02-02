@@ -16,7 +16,13 @@ logger.setLevel(logging.DEBUG)
 
 # Create file handler which logs even debug messages.
 if os.path.exists('debug.log'):
-    os.remove('debug.log')
+    try:
+        os.remove('debug.log')
+    # Since the logger is on the root level of the script, it is run whenever the file is imported.
+    # When running the Django server, this is called multiple times and on Windows
+    # this results in a bug trying to remove the file when it's in use. This works around that.
+    except:
+        pass
 fh = logging.FileHandler('debug.log')
 fh.setLevel(logging.DEBUG)
 
