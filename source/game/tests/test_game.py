@@ -1,10 +1,12 @@
-"""Items related to testing the console class."""
+"""Items related to testing the game class."""
 import pickle
 
 from source.game.piece import Piece
 from source.game.game import Game
 from source.game.player import Player
 from source.game.board import Board
+from source.game.parser import Parser
+import os
 
 
 class TestGame:
@@ -13,21 +15,17 @@ class TestGame:
     def test_move(self):
         """
         Focus on moving pieces using the movement methods that sequentially update the board state.
+        Uses a bunch of stuff, including the Parser.
         """
         
-        # Create a board.
+        # Load test_game_level
+        test_level_path = os.path.join('source', 'game', 'tests', 'resources', 'test_game_level')
+        
+        # Parse the test file into a Board object.
         board = Board()
+        Parser.parse_file(test_level_path, board)
         
-        # Create players and pieces for the game's board.            
-        first_cached_player = Player(0)
-        board.add_player(first_cached_player)
-        board.add_piece(Piece(first_cached_player, 0, 0, 0))
-        
-        second_cached_player = Player(1)
-        board.add_player(second_cached_player)
-        board.add_piece(Piece(second_cached_player, 6, 6, 1))
-            
-        # Create game.
+        # Create Game using the newly-created Board.
         game = Game.new_game(board)
         
         # Make sure first and second player can alternate moves.
@@ -57,19 +55,14 @@ class TestGame:
         Focus on making moves with storing and restoring game objects.
         """
         
-        # Create a board.
+        # Load test_game_level
+        test_level_path = os.path.join('source', 'game', 'tests', 'resources', 'test_game_level')
+        
+        # Parse the test file into a Board object.
         board = Board()
+        Parser.parse_file(test_level_path, board)
         
-        # Create players and pieces for the game's board.            
-        first_cached_player = Player(0)
-        board.add_player(first_cached_player)
-        board.add_piece(Piece(first_cached_player, 0, 0, 0))
-        
-        second_cached_player = Player(1)
-        board.add_player(second_cached_player)
-        board.add_piece(Piece(second_cached_player, 6, 6, 1))
-        
-        # Create game.
+        # Create Game using the newly-created Board.
         game = Game.new_game(board)
                 
         # Restore the game.
