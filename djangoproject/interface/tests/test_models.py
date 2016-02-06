@@ -79,17 +79,3 @@ class TestGameModel(TestCase):
         assert mock_core_game.make_move.called
         assert mock_core_game.make_move.call_args == (((1, 2), (3, 4)), {})
         assert game.data == 'dumps return'
-
-    @patch('interface.models.CoreBoard')
-    @patch('interface.models.CorePlayer')
-    def test_default_board_returns_a_board_object(self, mock_player_class, mock_board_class):
-        mock_board = Mock()
-        mock_board_class.return_value = mock_board
-        game_manager = GameManager()
-
-        board = game_manager.default_board()
-
-        assert len(mock_player_class.call_args_list) == 2
-        assert len(mock_board.add_player.call_args_list) == 2
-        assert len(mock_board.add_piece.call_args_list) == 2
-        assert board == mock_board

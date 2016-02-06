@@ -33,7 +33,7 @@ class GameManager(models.Manager):
         :return: The string representation of the Board object.
         :rtype: string
         """
-        only_board = '1....\n.....\n.....\n.....\n....2'
+        only_board = '1 . . . .\n. . . . .\n. . . . .\n. . . . .\n. . . . 2\n'
         return only_board
 
 
