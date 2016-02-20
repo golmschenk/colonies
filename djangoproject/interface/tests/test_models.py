@@ -2,7 +2,7 @@
 The view functions for the interface app.
 """
 import pickle
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, PropertyMock
 
 from django.test import TestCase
 
@@ -52,6 +52,14 @@ class TestGameModel(TestCase):
         assert color1 == 'red'
         assert color2 == 'blue'
         assert empty is None
+
+    def test_display_board_created_from_text_board(self):
+        game = Game()
+        type(game).board = PropertyMock(return_value=[['1', '.'], ['.', '2']])
+
+        display_board = game.display_board
+
+        assert display_board == [['red', None], [None, 'blue']]
 
     @patch('interface.models.pickle.loads')
     def test_can_retrieve_the_game_status_from_game_data(self, mock_loads):
