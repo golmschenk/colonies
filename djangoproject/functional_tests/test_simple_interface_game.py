@@ -32,9 +32,6 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         assert 'Game' in self.browser.title
         board_table = self.browser.find_element_by_id('board_table')
         board_table.find_element_by_tag_name('tr').find_element_by_tag_name('td')  # - At least one board tile exists.
-        for row in board_table.find_elements_by_tag_name('tr'):
-            for cell in row.find_elements_by_tag_name('td'):
-                assert any(character in cell.text for character in ['1', '2', '.'])  # - All elements make sense.
 
         # Kara, having never played, moves her only piece to the center of the board.
         def move_side_effect(*args, **kwargs):
@@ -54,8 +51,8 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         # They see Kara's piece in the middle of the board.
         board_table = self.browser.find_element_by_id('board_table')
         rows = board_table.find_elements_by_tag_name('tr')
-        assert '.' == rows[0].find_elements_by_tag_name('td')[0].text
-        assert '1' == rows[2].find_elements_by_tag_name('td')[2].text
+        assert 'red' not in rows[0].find_elements_by_tag_name('td')[0].get_attribute('innerHTML')
+        assert 'red' in rows[2].find_elements_by_tag_name('td')[2].get_attribute('innerHTML')
 
         # Iris, wanting to teach through example, promptly captures Kara's piece.
         def move_side_effect(*args, **kwargs):
@@ -76,9 +73,9 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         # Kara sees that her piece has been converted to Iris' team.
         board_table = self.browser.find_element_by_id('board_table')
         rows = board_table.find_elements_by_tag_name('tr')
-        assert '2' == rows[4].find_elements_by_tag_name('td')[4].text
-        assert '2' == rows[3].find_elements_by_tag_name('td')[3].text
-        assert '2' == rows[2].find_elements_by_tag_name('td')[2].text
+        assert 'blue' in rows[4].find_elements_by_tag_name('td')[4].get_attribute('innerHTML')
+        assert 'blue' in rows[3].find_elements_by_tag_name('td')[3].get_attribute('innerHTML')
+        assert 'blue' in rows[2].find_elements_by_tag_name('td')[2].get_attribute('innerHTML')
 
         # A display showing ending points comes up.
         status = self.browser.find_element_by_id('game_status')
@@ -101,9 +98,6 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         assert 'Game' in self.browser.title
         board_table = self.browser.find_element_by_id('board_table')
         board_table.find_element_by_tag_name('tr').find_element_by_tag_name('td')  # - At least one board tile exists.
-        for row in board_table.find_elements_by_tag_name('tr'):
-            for cell in row.find_elements_by_tag_name('td'):
-                assert any(character in cell.text for character in ['1', '2', '.'])  # - All elements make sense.
 
         # Kara, having never played, moves her only piece to the center of the board.
         current_x_position = self.browser.find_element_by_id('current_x_position')
@@ -120,8 +114,8 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         # They see Kara's piece in the middle of the board.
         board_table = self.browser.find_element_by_id('board_table')
         rows = board_table.find_elements_by_tag_name('tr')
-        assert '.' == rows[0].find_elements_by_tag_name('td')[0].text
-        assert '1' == rows[2].find_elements_by_tag_name('td')[2].text
+        assert 'red' not in rows[0].find_elements_by_tag_name('td')[0].get_attribute('innerHTML')
+        assert 'red' in rows[2].find_elements_by_tag_name('td')[2].get_attribute('innerHTML')
 
         # Iris, wanting to teach through example, promptly captures Kara's piece.
         current_x_position = self.browser.find_element_by_id('current_x_position')
@@ -138,9 +132,9 @@ class TestSimpleInterfaceGame(BaseFunctionalTest):
         # Kara sees that her piece has been converted to Iris' team.
         board_table = self.browser.find_element_by_id('board_table')
         rows = board_table.find_elements_by_tag_name('tr')
-        assert '2' == rows[4].find_elements_by_tag_name('td')[4].text
-        assert '2' == rows[3].find_elements_by_tag_name('td')[3].text
-        assert '2' == rows[2].find_elements_by_tag_name('td')[2].text
+        assert 'blue' in rows[4].find_elements_by_tag_name('td')[4].get_attribute('innerHTML')
+        assert 'blue' in rows[3].find_elements_by_tag_name('td')[3].get_attribute('innerHTML')
+        assert 'blue' in rows[2].find_elements_by_tag_name('td')[2].get_attribute('innerHTML')
 
         # A display showing ending points comes up.
         # status = self.browser.find_element_by_id('game_status')
