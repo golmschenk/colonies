@@ -45,7 +45,7 @@ class Game(models.Model):
     data = models.BinaryField(default=None)
 
     @property
-    def board_rows(self):
+    def board(self):
         """
         Retrieves the board rows from the pickled game data.
 
@@ -53,7 +53,9 @@ class Game(models.Model):
         :rtype: list[str]
         """
         unpickled_data = pickle.loads(self.data)
-        return unpickled_data.board.replace(' ', '').splitlines()
+        board_rows = unpickled_data.board.replace(' ', '').splitlines()
+        board_array = [list(row) for row in board_rows]
+        return board_array
 
     @property
     def status(self):

@@ -27,9 +27,9 @@ class TestGameModel(TestCase):
         game_data.board = '1..\n...\n..2'
         mock_loads.return_value = game_data
 
-        board_rows = game.board_rows
+        board_array = game.board
 
-        assert board_rows == ['1..', '...', '..2']
+        assert board_array == [['1', '.', '.'], ['.', '.', '.'], ['.', '.', '2']]
 
     @patch('interface.models.pickle.loads')
     def test_board_access_removes_spaces(self, mock_loads):
@@ -38,9 +38,9 @@ class TestGameModel(TestCase):
         game_data.board = '1. .\n.. .\n..2 '
         mock_loads.return_value = game_data
 
-        board_rows = game.board_rows
+        board_array = game.board
 
-        assert board_rows == ['1..', '...', '..2']
+        assert board_array == [['1', '.', '.'], ['.', '.', '.'], ['.', '.', '2']]
 
     @patch('interface.models.pickle.loads')
     def test_can_retrieve_the_game_status_from_game_data(self, mock_loads):
