@@ -42,6 +42,17 @@ class TestGameModel(TestCase):
 
         assert board_array == [['1', '.', '.'], ['.', '.', '.'], ['.', '.', '2']]
 
+    def test_color_from_player(self):
+        game = Game()
+
+        color1 = game.player_color('1')
+        color2 = game.player_color('2')
+        empty = game.player_color('.')
+
+        assert color1 == 'red'
+        assert color2 == 'blue'
+        assert empty is None
+
     @patch('interface.models.pickle.loads')
     def test_can_retrieve_the_game_status_from_game_data(self, mock_loads):
         game = Game()

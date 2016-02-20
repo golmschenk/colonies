@@ -47,7 +47,7 @@ class Game(models.Model):
     @property
     def board(self):
         """
-        Retrieves the board rows from the pickled game data.
+        Retrieves the board array from the pickled game data.
 
         :return: The list of board rows
         :rtype: list[str]
@@ -56,6 +56,14 @@ class Game(models.Model):
         board_rows = unpickled_data.board.replace(' ', '').splitlines()
         board_array = [list(row) for row in board_rows]
         return board_array
+
+    @staticmethod
+    def player_color(player_symbol):
+        colors = ['red', 'blue', 'green', 'yellow', 'purple', 'teal', 'brown', 'magenta']
+        try:
+            return colors[int(player_symbol)-1]
+        except ValueError:
+            return None
 
     @property
     def status(self):
