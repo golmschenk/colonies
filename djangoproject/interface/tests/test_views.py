@@ -68,14 +68,12 @@ class TestGamePage(TestCase):
     def test_game_pk_is_retrieve_by_passed_pk_and_set_in_context(self, mock_game_class, mock_get_object_or_404):
         game_view = GameView()
         mock_game = Mock()
-        mock_game.board = ['1', '.', '2']
         mock_get_object_or_404.return_value = mock_game
 
         context = game_view.get_context_data(**{'game_pk': 2})
 
         assert mock_get_object_or_404.called
         assert mock_get_object_or_404.call_args == ((mock_game_class,), {'pk': 2})
-        assert context['board'] == mock_game.board
 
 
 class TestMovePage(TestCase):
