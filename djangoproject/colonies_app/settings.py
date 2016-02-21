@@ -104,6 +104,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'colonies_app', 'static'),)
-STATIC_ROOT = '../static'
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(BASE_DIR, 'colonies_app', 'static'),
+)
