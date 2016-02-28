@@ -45,15 +45,43 @@ class Game(models.Model):
     data = models.BinaryField(default=None)
 
     @property
-    def board_rows(self):
+    def board(self):
         """
-        Retrieves the board rows from the pickled game data.
+        Retrieves the board array from the pickled game data.
 
         :return: The list of board rows
         :rtype: list[str]
         """
         unpickled_data = pickle.loads(self.data)
-        return unpickled_data.board.replace(' ', '').splitlines()
+        board_rows = unpickled_data.board.replace(' ', '').splitlines()
+        board_array = [list(row) for row in board_rows]
+        return board_array
+
+    @staticmethod
+    def player_color(player_symbol):
+        """
+        Gets the color for the players symbol.
+
+        :param player_symbol: The character that represents the players piece.
+        :type player_symbol: str
+        :return: The string of the color for that player. None if not a player piece.
+        :rtype: str or None
+        """
+        colors = ['red', 'blue', 'green', 'yellow', 'purple', 'teal', 'brown', 'magenta']
+        try:
+            return colors[int(player_symbol)-1]
+        except ValueError:
+            return None
+
+    @property
+    def display_board(self):
+        """
+        Gets the board in display form.
+
+        :return: The display array for the board.
+        :rtype: list[list[str or None]]
+        """
+        return [[self.player_color(cell) for cell in row] for row in self.board]
 
     @property
     def status(self):

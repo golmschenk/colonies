@@ -2,7 +2,7 @@
 The view functions for the interface app.
 """
 import pickle
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, PropertyMock
 
 from django.test import TestCase
 
@@ -27,9 +27,9 @@ class TestGameModel(TestCase):
         game_data.board = '1..\n...\n..2'
         mock_loads.return_value = game_data
 
-        board_rows = game.board_rows
+        board_array = game.board
 
-        assert board_rows == ['1..', '...', '..2']
+        assert board_array == [['1', '.', '.'], ['.', '.', '.'], ['.', '.', '2']]
 
     @patch('interface.models.pickle.loads')
     def test_board_access_removes_spaces(self, mock_loads):
@@ -38,9 +38,28 @@ class TestGameModel(TestCase):
         game_data.board = '1. .\n.. .\n..2 '
         mock_loads.return_value = game_data
 
-        board_rows = game.board_rows
+        board_array = game.board
 
-        assert board_rows == ['1..', '...', '..2']
+        assert board_array == [['1', '.', '.'], ['.', '.', '.'], ['.', '.', '2']]
+
+    def test_color_from_player(self):
+        game = Game()
+
+        color1 = game.player_color('1')
+        color2 = game.player_color('2')
+        empty = game.player_color('.')
+
+        assert color1 == 'red'
+        assert color2 == 'blue'
+        assert empty is None
+
+    def test_display_board_created_from_text_board(self):
+        game = Game()
+        type(game).board = PropertyMock(return_value=[['1', '.'], ['.', '2']])
+
+        display_board = game.display_board
+
+        assert display_board == [['red', None], [None, 'blue']]
 
     @patch('interface.models.pickle.loads')
     def test_can_retrieve_the_game_status_from_game_data(self, mock_loads):

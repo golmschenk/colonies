@@ -1,1 +1,19 @@
+.board {
+    height: 90vmin;
+    width: 90vmin;
 
+    tbody > tr > td {
+        padding: 0;
+        border: 5px solid $gray-darker;
+    }
+}
+
+.board_cell {
+    position: relative;
+}
+
+.piece {
+    position: absolute;
+    top: 0;
+    left: 0;
+}

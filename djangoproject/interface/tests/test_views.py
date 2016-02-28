@@ -55,9 +55,9 @@ class TestGamePage(TestCase):
         assert 'td' not in str(board_table)
 
     def test_template_has_table_cells_when_there_is_a_board_argument(self):
-        board_rows = ['1.2']
+        board_array = ['1', '.', '2']
 
-        response = render(HttpRequest(), 'game.html', context={'board_rows': board_rows, 'game_pk': 2})
+        response = render(HttpRequest(), 'game.html', context={'board': board_array, 'game_pk': 2})
         soup = BeautifulSoup(response.content, 'html.parser')
         board_table = soup.find(id='board_table')
 
@@ -68,14 +68,12 @@ class TestGamePage(TestCase):
     def test_game_pk_is_retrieve_by_passed_pk_and_set_in_context(self, mock_game_class, mock_get_object_or_404):
         game_view = GameView()
         mock_game = Mock()
-        mock_game.board_rows = ['1.2']
         mock_get_object_or_404.return_value = mock_game
 
         context = game_view.get_context_data(**{'game_pk': 2})
 
         assert mock_get_object_or_404.called
         assert mock_get_object_or_404.call_args == ((mock_game_class,), {'pk': 2})
-        assert context['board_rows'] == mock_game.board_rows
 
 
 class TestMovePage(TestCase):

@@ -46,7 +46,7 @@ class GameView(TemplateView):
         :rtype: dict
         """
         game = get_object_or_404(Game, pk=game_pk)
-        return {'game_pk': game_pk, 'board_rows': game.board_rows, 'game_status': game.status}
+        return {'game_pk': game_pk, 'board': game.display_board, 'game_status': game.status}
 
 
 class MoveView(RedirectView):
