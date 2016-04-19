@@ -1,3 +1,6 @@
+@import "texture-mixin";
+@import "custom-bootstrap-variables";
+
 .board {
     height: 90vmin;
     width: 90vmin;
@@ -16,4 +19,12 @@
     position: absolute;
     top: 0;
     left: 0;
+}
+
+body {
+    @include texture($body-bg, 48, 1);
+}
+
+.page-header {
+    border-bottom: 1px solid $gray;
 }
